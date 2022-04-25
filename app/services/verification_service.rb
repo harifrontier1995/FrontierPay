@@ -2,9 +2,9 @@ class VerificationService
   def initialize(phone_number, country_code)
     @phone_number = phone_number
     @country_code = country_code
-    @account_sid = "ACba261530abf7a184a71e0cd92716a913"
-    @auth_token = "e21e15337793b8253ad52458f39b4e39"
-    @service_sid = "VA3897d8a3e095fe4e21782d02494d4d69"
+    @account_sid = Rails.application.credentials.ACCOUNT_SID
+    @auth_token = Rails.application.credentials.AUTH_TOKEN
+    @service_sid = Rails.application.credentials.SERVICE_SID
 
     client = Twilio::REST::Client.new(@account_sid, @auth_token)
     @verification_service = client.verify.services(@service_sid)

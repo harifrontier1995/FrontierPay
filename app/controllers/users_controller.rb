@@ -7,23 +7,12 @@ class UsersController < ApplicationController
         )
         token = JsonWebToken.encode(user_id: user.id)
         user.api_token ? user.api_token.save_token(token) : user.build_api_token.save_token(token)
-        render json: {
-          user: serialize_data(user),
-          auth_token: token,
-          message: 'Phone number verified!'
-        }, status: :created
+        render json: {user: serialize_data(user),auth_token: token,message: 'Phone number verified!'}, status: :created
     else
       json_error_response 'Please enter a valid phone number.'
     end
   rescue Twilio::REST::RestError => e
     json_error_response 'otp code has expired. Resend code'
-  end
-
-  def checkAuth
-    render json: {
-      phone_number: @current_user.phone_number,
-      country_code: @current_user.country_code
-    }
   end
 
   def verify_otp_code?
