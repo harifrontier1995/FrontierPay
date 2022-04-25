@@ -35,11 +35,18 @@ class UsersController < ApplicationController
     }
   end
 
+  def update
+    @current_user.update(user_params)
+    json_response(status: 'success',
+                  message: Message.entity_updated(@current_user.class),
+                  user: serialize_data(@current_user))
+  end
+
   private
 
   def user_params
     params.require(:user).permit(
-      :name, :email, :country_code, :phone_number
+      :name, :email, :country_code, :phone_number, :first_name, :last_name
     )
   end
 end
