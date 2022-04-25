@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user_id: 1
+  token: MyText
+  ttl: 2022-04-25 15:21:03
+  is_active: false
+
+two:
+  user_id: 1
+  token: MyText
+  ttl: 2022-04-25 15:21:03
+  is_active: false
