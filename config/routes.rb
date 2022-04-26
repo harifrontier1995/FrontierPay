@@ -4,5 +4,6 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "articles#index"
   resources :users, only: [:create, :update]
-  post '/send_otp_code', as: 'user_send_otp_code', to: 'users#send_code'
+  post 'auth/login', to: 'authentication#authenticate'
+  post 'auth/signup', to: 'users#send_code'
 end

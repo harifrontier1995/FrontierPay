@@ -28,7 +28,7 @@ class UsersController < ApplicationController
       user_params[:phone_number],
       user_params[:country_code]
     ).send_otp_code
-
+    
     render json: {
       phone_number: user_params[:phone_number],
       country_code: user_params['country_code'],
