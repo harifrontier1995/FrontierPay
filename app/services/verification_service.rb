@@ -23,6 +23,4 @@ class VerificationService
 
     verification_check.status == 'approved'
   end
-
-
 end

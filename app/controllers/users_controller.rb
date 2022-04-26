@@ -8,7 +8,7 @@ class UsersController < ApplicationController
         )
         token = JsonWebToken.encode(user_id: user.id)
         user.api_token ? user.api_token.save_token(token) : user.build_api_token.save_token(token)
-        render json: {user: serialize_data(user),auth_token: token,message: 'Phone number verified!'}, status: :created
+        render json: {status: 'success',data:{ user: serialize_data(user), message: "Phone number Verified"},auth_token: token}
     else
       json_error_response 'Please enter a valid phone number.'
     end
@@ -28,19 +28,12 @@ class UsersController < ApplicationController
       user_params[:phone_number],
       user_params[:country_code]
     ).send_otp_code
-
-    render json: {
-      phone_number: user_params[:phone_number],
-      country_code: user_params['country_code'],
-      message: response
-    }
+    render json: { status: 'success', data: { message: response} }
   end
 
   def update
     @current_user.update(user_params)
-    json_response(status: 'success',
-                  message: Message.entity_updated(@current_user.class),
-                  user: serialize_data(@current_user))
+    json_response(user: serialize_data(@current_user))
   end
 
   private

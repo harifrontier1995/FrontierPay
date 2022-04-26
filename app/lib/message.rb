@@ -15,6 +15,14 @@ class Message
     'Missing token'
   end
 
+  def self.invalid_appkey
+    'Invalid appkey'
+  end
+
+  def self.missing_appkey
+    'Missing appkey'
+  end
+
   def self.unauthorized
     'Unauthorized request'
   end
