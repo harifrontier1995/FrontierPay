@@ -10,6 +10,10 @@ class AuthorizeApiRequest
     }
   end
 
+  def verify_app_key
+    http_auth_appkey
+  end
+
   private
 
   attr_reader :headers
@@ -45,6 +49,19 @@ class AuthorizeApiRequest
     if headers['Authorization'].present?
       return headers['Authorization'].split(' ').last
     end
-      raise(ExceptionHandler::MissingToken, Message.missing_token)
+    raise(ExceptionHandler::MissingToken, Message.missing_token)
+  end
+
+    # check for appkey in header
+  def http_auth_appkey
+    if headers['AppKey'].present?
+      if headers['AppKey'].split(' ').last == Rails.application.credentials.APP_KEY
+        return true
+      else 
+        raise(ExceptionHandler::InvalidAppKey, Message.invalid_appkey)
+      end  
+    else
+      raise(ExceptionHandler::MissingAppKey, Message.missing_appkey)
+    end
   end
 end

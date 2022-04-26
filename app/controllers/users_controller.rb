@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+
   def create
     if verify_otp_code?
         user = User.find_or_create_by(
@@ -49,4 +50,6 @@ class UsersController < ApplicationController
       :name, :email, :country_code, :phone_number, :first_name, :last_name
     )
   end
+
+ 
 end
