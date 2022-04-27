@@ -1,5 +1,5 @@
 class VerificationService
-  def initialize(phone_number, country_code)
+  def initialize(phone_number, country_code="+91")
     @phone_number = phone_number
     @country_code = country_code
     @account_sid = Rails.application.credentials.ACCOUNT_SID

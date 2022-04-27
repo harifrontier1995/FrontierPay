@@ -3,7 +3,6 @@ class UsersController < ApplicationController
   def create
     if verify_otp_code?
         user = User.find_or_create_by(
-          country_code: user_params[:country_code],
           phone_number: user_params[:phone_number]
         )
         token = JsonWebToken.encode(user_id: user.id)
@@ -18,15 +17,13 @@ class UsersController < ApplicationController
 
   def verify_otp_code?
     VerificationService.new(
-      user_params[:phone_number],
-      user_params[:country_code]
+      user_params[:phone_number]
     ).verify_otp_code?(params['otp_code'])
   end
 
   def send_code
     response = VerificationService.new(
-      user_params[:phone_number],
-      user_params[:country_code]
+      user_params[:phone_number]
     ).send_otp_code
     render json: { status: 'success', data: { message: response} }
   end
