@@ -22,6 +22,12 @@ class UsersController < ApplicationController
   end
 
   def send_code
+    message = "Otp code is #{generate_otp}"
+    response = TWILIO.api.account.messages.create(:from => "+1#{8453799597}",:to => "+91#{9150968427}",:body => message)
+    if response.sent
+      verification = Verification.find_or_create_by(phone_number: "9487115686")
+      verification.update(otp_code: "3456", sent_time: Time.now)
+    end
     response = VerificationService.new(
       user_params[:phone_number]
     ).send_otp_code
@@ -39,6 +45,10 @@ class UsersController < ApplicationController
     params.require(:user).permit(
       :name, :email, :country_code, :phone_number, :first_name, :last_name
     )
+  end
+
+  def generate_otp
+    SecureRandom.random_number(10000)
   end
 
  
