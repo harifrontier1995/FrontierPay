@@ -2,11 +2,7 @@ class Message
   def self.not_found(record = 'record')
     "Sorry, #{record} not found."
   end
-
-  def self.invalid_credentials
-    'Invalid credentials'
-  end
-
+  
   def self.invalid_token
     'Invalid token'
   end
@@ -43,12 +39,8 @@ class Message
     'Sorry, your token has expired. Please login to continue.'
   end
 
-  def self.user_logout
-    'You have been successfully logged out!'
-  end
-
-  def self.authentication_success
-    'User authentication was successful'
+  def self.expired_otp
+    'Sorry, your otp has expired. Please login to continue.'
   end
 
   def self.token_creation_success_for_forgot_password

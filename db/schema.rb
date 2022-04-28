@@ -36,7 +36,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_28_041553) do
   create_table "verifications", force: :cascade do |t|
     t.bigint "phone_number"
     t.string "otp_code"
-    t.time "sent_time"
+    t.datetime "sent_time"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

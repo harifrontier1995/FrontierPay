@@ -3,7 +3,7 @@ class CreateVerifications < ActiveRecord::Migration[7.0]
     create_table :verifications do |t|
       t.bigint :phone_number
       t.string :otp_code
-      t.time :sent_time
+      t.datetime :sent_time
 
       t.timestamps
     end
