@@ -3,7 +3,7 @@ class ApplicationController < ActionController::API
   include ExceptionHandler
   # called before every action on controllers
   before_action :validate_app_key
-  before_action :authorize_request, except: [:send_code, :create]
+  before_action :authorize_request, except: [:send_code, :create, :send_otp, :verify_otp]
   attr_reader :current_user
 
   
