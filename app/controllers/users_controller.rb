@@ -30,10 +30,10 @@ class UsersController < ApplicationController
 
   def send_otp
     response, otp = TwoFactor.send_otp_code params["phone_number"]
-    if response["Status"] == "Success"
+    if response
       verification = Verification.find_or_create_by(phone_number: params["phone_number"])
       verification.update(otp_code: otp, sent_time: Time.now)
-      render json: { status: 'success', data: { message: response} }
+      render json: { status: 'success', data: { message: "Otp sent"} }
     else
       json_error_response 'otp not sent'
     end
