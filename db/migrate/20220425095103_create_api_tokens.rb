@@ -3,7 +3,7 @@ class CreateApiTokens < ActiveRecord::Migration[7.0]
     create_table :api_tokens do |t|
       t.integer :user_id
       t.text :token
-      t.time :ttl
+      t.integer :expiry_time
       t.boolean :is_active
 
       t.timestamps

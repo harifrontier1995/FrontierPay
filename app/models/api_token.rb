@@ -3,12 +3,12 @@ class ApiToken < ApplicationRecord
   belongs_to :user
 
   # Validations
-  validates_presence_of :user_id, :token, :ttl, :is_active
+  validates_presence_of :user_id, :token, :expiry_time, :is_active
   validates_uniqueness_of :token
 
   def save_token token
     self.token = token
-    self.ttl = Time.now+API_TOKEN_EXPIRY_TIME.minutes
+    self.expiry_time = Time.now+30.minutes
     self.is_active = true
   	save!
   end
@@ -18,7 +18,7 @@ class ApiToken < ApplicationRecord
   end
 
   def is_valid? http_auth_header
-    ttl > Time.now &&
+    expiry_time > Time.now.to_i && 
     is_active && 
     token == http_auth_header
   end
