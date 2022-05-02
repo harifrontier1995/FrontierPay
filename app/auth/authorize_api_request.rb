@@ -37,6 +37,11 @@ class AuthorizeApiRequest
       ExceptionHandler::InvalidToken,
       ("#{Message.invalid_token} #{e.message}")
     )
+  rescue
+    raise(
+        ExceptionHandler::InvalidToken,
+        ("#{Message.invalid_token}")
+    )
   end
 
   # decode authentication token
