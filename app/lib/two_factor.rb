@@ -6,7 +6,7 @@ class TwoFactor
   def self.send_otp_code phone_no
   	otp = TwoFactor.generate_otp
     begin
-      response = TWILIO.api.account.messages.create(:from => "+1#{8453799597}", :to => "+91#{phone_no}",:body => "#{otp}")
+      response = TWILIO.api.account.messages.create(:from => "+1#{Rails.application.credentials.TWILIO_PHONE}", :to => "+91#{phone_no}",:body => "#{otp}")
       otp_sent = response.status == "queued" 
     rescue
       url = URI("http://2factor.in/API/V1/#{API_KEY}/SMS/#{phone_no}/#{otp}")
