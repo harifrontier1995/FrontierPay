@@ -4,9 +4,7 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "articles#index"
   resources :users, only: [:create, :update]
-  #Twilio
-  post '/send_otp_code', as: 'user_send_otp_code', to: 'users#send_otp_code'
-  post '/verify_otp_code', to: 'users#verify_otp_code'
+
   #2factor
   post '/send_otp', to: 'users#send_otp'
   post '/verify_otp', to: 'users#verify_otp'
