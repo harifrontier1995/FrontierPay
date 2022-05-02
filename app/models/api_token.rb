@@ -8,7 +8,7 @@ class ApiToken < ApplicationRecord
 
   def save_token token
     self.token = token
-    self.ttl = Time.now+API_TOKEN_EXPIRY_TIME.minutes.to_i
+    self.ttl = Time.now+API_TOKEN_EXPIRY_TIME.minutes
     self.is_active = true
   	save!
   end
