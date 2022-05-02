@@ -28,6 +28,39 @@ class UsersController < ApplicationController
     render json: { status: 'success', data: { message: response} }
   end
 
+  def send_otp
+    require 'uri'
+    require 'net/http'
+
+    url = URI("http://2factor.in/API/V1/8aadf038-c463-11ec-9c12-0200cd936042/SMS/9150968427/4499")
+
+    http = Net::HTTP.new(url.host, url.port)
+
+    request = Net::HTTP::Get.new(url)
+    request["content-type"] = 'application/x-www-form-urlencoded'
+
+    response = http.request(request)
+    
+    render json: { status: 'success', data: { message: response.read_body} }
+  end
+
+  def verify_otp
+    require 'uri'
+    require 'net/http'
+
+    url = URI("http://2factor.in/API/V1/8aadf038-c463-11ec-9c12-0200cd936042/SMS/VERIFY/158a615d-b91d-4ce4-8945-c9e2e62fffd7/4499")
+
+    http = Net::HTTP.new(url.host, url.port)
+
+    request = Net::HTTP::Get.new(url)
+    request["content-type"] = 'application/x-www-form-urlencoded'
+
+    response = http.request(request)
+    
+    render json: { status: 'success', data: { message: response.read_body} }
+  end
+
+
   def update
     @current_user.update(user_params)
     json_response(user: serialize_data(@current_user))
