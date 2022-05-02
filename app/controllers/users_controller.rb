@@ -21,7 +21,7 @@ class UsersController < ApplicationController
     ).verify_otp_code?(params['otp_code'])
   end
 
-  def send_code
+  def send_otp_code
     response = VerificationService.new(
       user_params[:phone_number]
     ).send_otp_code
