@@ -18,7 +18,8 @@ class ApiToken < ApplicationRecord
   end
 
   def is_valid? http_auth_header
-     is_active && 
-     token == http_auth_header
+    ttl > Time.now &&
+    is_active && 
+    token == http_auth_header
   end
 end

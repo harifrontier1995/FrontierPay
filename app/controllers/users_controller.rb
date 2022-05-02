@@ -29,41 +29,38 @@ class UsersController < ApplicationController
   end
 
   def send_otp
-    require 'uri'
-    require 'net/http'
-
-    url = URI("http://2factor.in/API/V1/8aadf038-c463-11ec-9c12-0200cd936042/SMS/9150968427/4499")
-
-    http = Net::HTTP.new(url.host, url.port)
-
-    request = Net::HTTP::Get.new(url)
-    request["content-type"] = 'application/x-www-form-urlencoded'
-
-    response = http.request(request)
-    
-    render json: { status: 'success', data: { message: response.read_body} }
+    response, otp = TwoFactor.send_otp_code params["phone_number"]
+    if response["Status"] == "Success"
+      verification = Verification.find_or_create_by(phone_number: params["phone_number"])
+      verification.update(otp_code: otp, sent_time: Time.now)
+      render json: { status: 'success', data: { message: response} }
+    else
+      json_error_response 'otp not sent'
+    end
   end
 
   def verify_otp
-    require 'uri'
-    require 'net/http'
-
-    url = URI("http://2factor.in/API/V1/8aadf038-c463-11ec-9c12-0200cd936042/SMS/VERIFY/158a615d-b91d-4ce4-8945-c9e2e62fffd7/4499")
-
-    http = Net::HTTP.new(url.host, url.port)
-
-    request = Net::HTTP::Get.new(url)
-    request["content-type"] = 'application/x-www-form-urlencoded'
-
-    response = http.request(request)
-    
-    render json: { status: 'success', data: { message: response.read_body} }
+    verification = Verification.find_by(phone_number: params["phone_number"])
+    if verification.present?
+      if verification.is_valid?(params["otp_code"])
+        user = User.find_or_create_by(phone_number: params["phone_number"])
+        token = JsonWebToken.encode(user_id: user.id)
+        user.api_token ? user.api_token.save_token(token) : user.build_api_token.save_token(token)
+        render json: {status: 'success',data:{ user: serialize_data(user), message: "Phone number Verified"},auth_token: token}
+      else
+        json_error_response Message.expired_otp
+      end
+    else 
+      json_error_response 'Please enter a valid phone number.'
+    end
   end
 
-
   def update
-    @current_user.update(user_params)
-    json_response(user: serialize_data(@current_user))
+    if @current_user.update user_params
+      json_response(user: serialize_data(@current_user))
+    else
+      json_error_response @user.errors.full_messages
+    end
   end
 
   private
@@ -73,6 +70,5 @@ class UsersController < ApplicationController
       :name, :email, :country_code, :phone_number, :first_name, :last_name
     )
   end
-
  
 end
